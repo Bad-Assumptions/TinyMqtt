@@ -31,6 +31,12 @@
   #define dbg_ptr uint32_t
 #endif
 
+#ifdef ESP_PLATFORM
+#warning ESP_IDF TEST
+#include <esp_timer.h>
+#define millis(x) ((uint32_t)(esp_timer_get_time() / 1000))
+#endif
+
 #ifdef WIO_TERMINAL
   // Uncommon board handling
   // If you have a problem with this line, just remove it.
