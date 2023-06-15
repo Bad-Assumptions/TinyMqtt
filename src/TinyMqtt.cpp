@@ -659,15 +659,15 @@ void MqttClient::processMessage(MqttMessage* mesg)
         if (qos) {
           ID = payload;
           payload+=2;  // ignore packet identifier if any
+          if (qos == 1)
+          {
+            MqttMessage msg(MqttMessage::Type::PubAck);
+            msg.add(ID[0]);  // MessageID high
+            msg.add(ID[1]);  // MessageID low
+            msg.sendTo(this);
+          }
         }
         len=mesg->end()-payload;
-        if (qos == 1)
-        {
-          MqttMessage msg(MqttMessage::Type::PubAck);
-          msg.add(ID[0]);  // MessageID high
-          msg.add(ID[1]);  // MessageID low
-          msg.sendTo(this);
-        }
         // TODO reset DUP
         // TODO reset RETAIN
 
